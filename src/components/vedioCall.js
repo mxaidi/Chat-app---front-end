@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 
-
-
-
-
-
 class VedioCall extends Component {
 
   state = {
@@ -12,17 +7,17 @@ class VedioCall extends Component {
   };
 
   componentDidMount= () => {
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
-    if (navigator.getUserMedia) {
-        navigator.getUserMedia({audio: false, video:{ width: { min: 1024, ideal: 1280, max: 1920 },
-                height: { min: 576, ideal: 720, max: 1080 }},}, this.handleVideo, this.videoError);
-    }
+    navigator.mediaDevices.getUserMedia({audio: false, video:{ width: { min: 1024, ideal: 1280, max: 1920 },
+      height: { min: 576, ideal: 720, max: 1080 }},}, this.handleVideo, this.videoError)
+    .then(stream => this.refs.video.src = stream)
+    .catch(e => console.log(e.name + ": "+ e.message));
   };
 
 
   handleVideo= (stream)=> {
     // Update the state, triggering the component to re-render with the correct stream
-    this.refs.video.src = window.URL.createObjectURL(stream);
+    console.log('', stream)
+    this.refs.video.src = stream;
   };
 
   videoError= ()=> {

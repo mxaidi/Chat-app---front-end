@@ -22,13 +22,14 @@ const authRoutes = require("./server/routers/auth-routers")(passport);
 const userRoutes = require("./server/routers/user-routers")();
 
 
-const db = 'mongodb://localhost:27017/psl';
+
+const db = "mongodb://test:test@ds119988.mlab.com:19988/skypeclone";
 
 //const db = config.DB_Connection.URL; 
 const port = process.env.PORT || 3001;
 
 mongoose.Promise = global.Promise;
-mongoose.connect(db, {useNewUrlParser: true});
+mongoose.connection.openUri(db);
 
 app.use(express.static('public'))
 
@@ -80,7 +81,6 @@ io.sockets.on('connection', socket => {
       id: sessionid,
     })
   })
-
   socket.on('joinRoom', (roomInfo)=>{
     console.log('joining room', roomInfo);
     //Save into chatmodel.
